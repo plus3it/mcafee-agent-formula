@@ -4,7 +4,7 @@ environment:
   global:
     SALT_FILEROOT: '%APPVEYOR_BUILD_FOLDER%'
     SALT_STATE: mcafee-agent
-    SALT_URL: 'https://repo.saltstack.com/windows/Salt-Minion-2016.3.2-AMD64-Setup.exe'
+    SALT_URL: 'https://repo.saltstack.com/windows/Salt-Minion-2016.3.4-AMD64-Setup.exe'
   matrix:
     - SALT_PILLARROOT: '%APPVEYOR_BUILD_FOLDER%\tests\pillar\test-windows-main'
 
@@ -28,6 +28,13 @@ test_script:
         --file-root=${env:SALT_FILEROOT} `
         state.show_sls `
         "${env:SALT_STATE}"
+  - ps: |
+      C:\salt\salt-call.bat --local --retcode-passthrough `
+        --log-file-level debug `
+        --file-root="${env:SALT_FILEROOT}" `
+        state.sls `
+        "${env:SALT_STATE}" `
+        mock=True
 
 on_failure:
   - ps: C:\salt\salt-call.bat --local grains.items
