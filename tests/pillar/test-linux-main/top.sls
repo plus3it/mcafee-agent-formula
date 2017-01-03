@@ -1,3 +1,3 @@
 base:
   '*':
-    - mcafee-agent
+    - main
