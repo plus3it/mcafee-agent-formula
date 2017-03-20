@@ -53,6 +53,7 @@ Stage McAfee Install Archive:
   - user: root
   - group: root
   - mode: 0700
+  - show_changes: False
   - require:
     - pkg: Install McAfee Agent Dependencies
 
