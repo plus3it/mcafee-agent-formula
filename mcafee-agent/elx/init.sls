@@ -13,6 +13,7 @@ Install McAfee Agent Dependencies:
   pkg.installed:
     - pkgs:
       - unzip
+      - ed
 
 {%- for port in mcafee.client_in_ports %}
   {%- if salt.grains.get('osmajorrelease') == '7'%}
