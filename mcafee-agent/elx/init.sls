@@ -17,14 +17,17 @@ Install McAfee Agent Dependencies:
 
 {%- for port in mcafee.client_in_ports %}
   {%- if salt.grains.get('osmajorrelease') == '7'%}
-    {%- set FwZone = salt.firewalld.default_zone() %}
-Allow ePO Mgmt Inbound Port {{ port }}:
+    {%- for zone in salt.firewalld.get_zones() %}
+Allow ePO Mgmt Inbound Port {{ port }}-{{ zone }}:
   module.run:
     - name: 'firewalld.add_port'
-    - zone: '{{ FwZone }}'
+    - zone: '{{ zone }}'
     - port: '{{ port }}/tcp'
     - permanent: True
-Reload firewalld for McAfee Outbound Port {{ port }}:
+    - require_in:
+      - module: Reload firewalld for McAfee Inbound Port {{ port }}
+    {%- endfor %}
+Reload firewalld for McAfee Inbound Port {{ port }}:
   module.run:
     - name: firewalld.reload_rules
   {%- elif salt.grains.get('osmajorrelease') == '6'%}
