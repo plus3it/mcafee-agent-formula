@@ -63,7 +63,7 @@ Stage McAfee Install Archive:
 
 Install McAfee Agent:
   cmd.run:
-    - name: 'sh /root/install.sh -i'
+    - name: 'sh /root/install.sh {{ mcafee.installer_opts }}'
     - cwd: '/root'
     - require:
       - file: Stage McAfee Install Archive
