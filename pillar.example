@@ -54,3 +54,6 @@ mcafee-agent:
     # List of ports to open inbound for remote-management
     #client_in_ports:
     #  - 8591
+
+    # Options to pass to installer script
+    # installer_opts: '-i -r'

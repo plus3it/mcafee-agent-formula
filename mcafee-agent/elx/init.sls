@@ -16,7 +16,7 @@ Install McAfee Agent Dependencies:
       - ed
 
 {%- for port in mcafee.client_in_ports %}
-  {%- if salt.grains.get('osmajorrelease') == '7'%}
+  {%- if salt.grains.get('osmajorrelease') == 7 %}
     {%- for zone in salt.firewalld.get_zones() %}
 Allow ePO Mgmt Inbound Port {{ port }}-{{ zone }}:
   module.run:
@@ -30,7 +30,7 @@ Allow ePO Mgmt Inbound Port {{ port }}-{{ zone }}:
 Reload firewalld for McAfee Inbound Port {{ port }}:
   module.run:
     - name: firewalld.reload_rules
-  {%- elif salt.grains.get('osmajorrelease') == '6'%}
+  {%- elif salt.grains.get('osmajorrelease') == 6 %}
 Allow ePO Mgmt Inbound Port {{ port }}:
   iptables.append:
     - table: filter
@@ -63,7 +63,7 @@ Stage McAfee Install Archive:
 
 Install McAfee Agent:
   cmd.run:
-    - name: 'sh /root/install.sh -i'
+    - name: 'sh /root/install.sh {{ mcafee.installer_opts }}'
     - cwd: '/root'
     - require:
       - file: Stage McAfee Install Archive
