@@ -61,16 +61,14 @@ Stage McAfee Install Archive:
   - require:
     - pkg: Install McAfee Agent Dependencies
 
+Remove Existing Packages:
+  pkg.purged:
+    - pkgs: {{ mcafee.rpms }}
+
 Install McAfee Agent:
   cmd.run:
     - name: 'sh /root/install.sh {{ mcafee.installer_opts }}'
     - cwd: '/root'
     - require:
       - file: Stage McAfee Install Archive
-    - unless:
-{%- for rpm in mcafee.rpms %}
-      - 'rpm --quiet -q {{ rpm }}'
-{%- endfor %}
-{%- for key_file in mcafee.key_files %}
-      - 'test -s {{ mcafee.keystore_directory }}/{{ key_file }}'
-{%- endfor %}
+      - pkg: Remove Existing Packages
