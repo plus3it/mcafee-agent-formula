@@ -7,7 +7,7 @@ env:
     - SALT_PILLARROOT=$TRAVIS_BUILD_DIR/tests/pillar/test-linux-main
     - SALT_REPO_URL=https://repo.saltproject.io/py3/redhat/7/x86_64/3003.repo
   matrix:
-    - OS_VERSION=7 SALT_STATE=mcafee-agent
+    - OS_VERSION=7 SALT_STATE=trellix-agent
 
 services:
   - docker
