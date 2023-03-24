@@ -13,6 +13,7 @@ init:
   - ps: echo $env:PILLAR_HOME
 install:
   - ps: |
+      $env:PYTHONWARNINGS="ignore::UserWarning:distutils"
       $null = `
         (new-object net.webclient).DownloadFile(${env:SALT_URL}, `
         "${env:temp}\salt-minion.exe")
