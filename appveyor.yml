@@ -13,7 +13,6 @@ init:
   - ps: echo $env:PILLAR_HOME
 install:
   - ps: |
-      $env:PYTHONWARNINGS="ignore::UserWarning:distutils"
       $null = `
         (new-object net.webclient).DownloadFile(${env:SALT_URL}, `
         "${env:temp}\salt-minion.exe")
@@ -21,7 +20,9 @@ install:
       $null = `
         Start-Process -FilePath "${env:temp}\salt-minion.exe" `
         -ArgumentList  @("/S", "/install-dir=c:\salt") -NoNewWindow -PassThru -Wait
-  - ps: C:\salt\salt-call.bat --versions-report
+  - ps: |
+        python -m pip install --upgrade setuptools
+        C:\salt\salt-call.bat --versions-report
 
 test_script:
   - ps: |
