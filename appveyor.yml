@@ -4,7 +4,7 @@ environment:
   global:
     SALT_FILEROOT: '%APPVEYOR_BUILD_FOLDER%'
     SALT_PILLARROOT: '%APPVEYOR_BUILD_FOLDER%\tests\pillar\test-windows-main'
-    SALT_URL: 'https://repo.saltproject.io/windows/Salt-Minion-3005.1-5-Py3-AMD64-Setup.exe'
+    SALT_URL: 'https://repo.saltproject.io/windows/Salt-Minion-3004.2-1-Py3-AMD64-Setup.exe'
   matrix:
     - SALT_STATE: mcafee-agent
     - SALT_STATE: trellix-agent
@@ -20,10 +20,7 @@ install:
       $null = `
         Start-Process -FilePath "${env:temp}\salt-minion.exe" `
         -ArgumentList  @("/S", "/install-dir=c:\salt") -NoNewWindow -PassThru -Wait
-  - ps: |
-        python3 -m pip install --upgrade setuptools
-        python3 -m pip install --upgrade pip
-        C:\salt\salt-call.bat --versions-report
+  - ps: C:\salt\salt-call.bat --versions-report
 
 test_script:
   - ps: |
