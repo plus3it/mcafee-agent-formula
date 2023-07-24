@@ -55,5 +55,9 @@ trellix-agent:
     #client_in_ports:
     #  - 8591
 
+    # List of source CIDRs to allow for the inbound ports
+    #client_in_ports:
+    #  - 0.0.0.0/0
+
     # Options to pass to installer script
     # installer_opts: '-i -r'

@@ -178,3 +178,21 @@ trellix-agent:
     client_in_ports:
       - 8591
 ```
+
+### `trellix-agent:lookup:client_in_sources`
+
+The `client_in_sources` parameter is a list of CIDRs to enable inbound for remote
+management of the Trellix Agent.
+
+>**Required**: `False`
+>
+>**Default**: _See example below_
+
+**Example**:
+
+```yaml
+trellix-agent:
+  lookup:
+    client_in_sources:
+      - 0.0.0.0/0
+```
