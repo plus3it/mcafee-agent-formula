@@ -31,7 +31,9 @@ install:
   - sudo docker exec centos-${OS_VERSION} yum -y install
       $(<${TRAVIS_BUILD_DIR}/tests/requirements.txt)
       $(<${TRAVIS_BUILD_DIR}/tests/requirements-el${OS_VERSION}.txt)
-  - sudo docker exec centos-${OS_VERSION} systemctl start firewalld
+
+  # - sudo docker exec centos-${OS_VERSION} systemctl start firewalld
+
   - sudo docker exec centos-${OS_VERSION} salt-call --versions-report
   - sudo docker exec centos-${OS_VERSION} salt-call --local
       --retcode-passthrough
