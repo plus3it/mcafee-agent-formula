@@ -15,39 +15,38 @@ Install Trellix Agent Dependencies:
       - unzip
       - ed
 
-{%- for port in trellix.client_in_ports %}
-  {%- if salt.grains.get('osmajorrelease') == 7 %}
-    {%- for zone in salt.firewalld.get_zones() %}
-Allow ePO Mgmt Inbound Port {{ port }}-{{ zone }}:
-  module.run:
-    - name: 'firewalld.add_port'
-    - zone: '{{ zone }}'
-    - port: '{{ port }}/tcp'
-    - permanent: True
-    - require_in:
-      - module: Reload firewalld for Trellix Inbound Port {{ port }}
-    {%- endfor %}
-Reload firewalld for Trellix Inbound Port {{ port }}:
-  module.run:
-    - name: firewalld.reload_rules
-  {%- elif salt.grains.get('osmajorrelease') == 6 %}
-Allow ePO Mgmt Inbound Port {{ port }}:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - jump: ACCEPT
-    - match:
-        - state
-        - comment
-    - comment: "ePO management of Trellix Agent"
-    - connstate: NEW
-    - dport: {{ port }}
-    - proto: tcp
-    - save: True
-    - require_in:
-      - file: Stage Trellix Install Archive
-  {%- endif %}
-{%- endfor %}
+{%- if trellix.client_in_ports %}
+Install firewalld for Trellix:
+  pkg.installed:
+    - pkgs:
+      - firewalld
+
+Ensure firewalld is running for Trellix:
+  service.running:
+    - name: firewalld
+    - enable: True
+    - watch:
+      - pkg: Install firewalld for Trellix
+
+Configure firewalld service for Trellix:
+  firewalld.service:
+    - name: trellix
+    - ports:
+      {%- for port in trellix.client_in_ports %}
+      - {{ port }}/tcp
+      {%- endfor %}
+    - require:
+      - service: Ensure firewalld is running for Trellix
+
+Configure firewalld zone for Trellix:
+  firewalld.present:
+    - name: trellix
+    - services:
+      - trellix
+    - sources: {{ trellix.client_in_sources }}
+    - require:
+      - firewalld: Configure firewalld service for Trellix
+{%- endif %}
 
 Stage Trellix Install Archive:
   file.managed:
